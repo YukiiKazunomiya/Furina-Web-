@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YAGAMI CRASHER - SCRIPT COPYRIGHT YUKIE</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CORE VARIABLES --- */
+        :root {
+            --primary: #00f2ff; /* Cyber Blue */
+            --secondary: #9d00ff; /* Neon Purple */
+            --bg-dark: #020205;
+            --card-bg: rgba(15, 15, 20, 0.9);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 242, 255, 0.2);
+            --text-main: #ffffff;
+            --success: #00ff88;
+            --danger: #ff0055;
+            --warning: #ffcc00;
+        }
+
+        /* --- RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            padding-bottom: 100px;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 5px var(--primary); } 50% { box-shadow: 0 0 20px var(--primary); } 100% { box-shadow: 0 0 5px var(--primary); } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* --- BACKGROUND FX --- */
+        .cyber-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- HEADER --- */
+        .header-wrapper {
+            position: relative; width: 100%; height: 250px;
+            border-bottom: 2px solid var(--primary);
+            overflow: hidden; box-shadow: 0 0 30px rgba(157, 0, 255, 0.2);
+            z-index: 1;
+        }
+        .header-video {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1; filter: brightness(0.5);
+        }
+        .header-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(0deg, var(--bg-dark) 0%, transparent 100%);
+            z-index: 2; pointer-events: none; /* AGAR TIDAK MENGHALANGI KLIK */
+        }
+        .header-content {
+            position: absolute; bottom: 20px; left: 20px; z-index: 5;
+            width: 100%; pointer-events: none;
+        }
+        .glitch-title {
+            font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 800;
+            color: white; text-transform: uppercase; letter-spacing: 2px;
+            text-shadow: 3px 3px 0px var(--secondary);
+        }
+        .sub-title { font-size: 0.8rem; color: #ccc; display: flex; align-items: center; gap: 5px; }
+
+        /* --- SOUND BUTTON --- */
+        .sound-btn {
+            position: absolute; top: 20px; right: 20px; z-index: 20; /* Z-INDEX TINGGI */
+            background: rgba(0,0,0,0.6); border: 1px solid var(--primary);
+            color: var(--primary); width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+        .sound-btn:active { transform: scale(0.9); background: var(--primary); color: black; }
+
+        /* --- MARQUEE --- */
+        .marquee-box {
+            background: rgba(157, 0, 255, 0.1); border-bottom: 1px solid var(--secondary);
+            padding: 8px 0; overflow: hidden; white-space: nowrap; margin-bottom: 20px;
+        }
+        .marquee-text {
+            display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite;
+            font-family: 'Rajdhani', sans-serif; color: var(--primary); font-size: 0.9rem;
+        }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* --- CONTAINER --- */
+        .container { padding: 0 20px; max-width: 800px; margin: 0 auto; position: relative; z-index: 10; }
+
+        /* --- PROFILE CARD --- */
+        .profile-glass {
+            background: linear-gradient(135deg, rgba(20,20,30,0.9), rgba(10,10,10,0.9));
+            border: 1px solid var(--border); padding: 20px; border-radius: 16px;
+            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative; z-index: 10;
+        }
+        .profile-img {
+            width: 65px; height: 65px; border-radius: 50%;
+            border: 2px solid var(--success); object-fit: cover; padding: 3px;
+        }
+        .status-badge {
+            background: rgba(0, 255, 136, 0.15); color: var(--success);
+            padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        /* --- SHORTCUTS --- */
+        .shortcut-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;
+        }
+        .shortcut-btn {
+            background: var(--glass); border: 1px solid #333; padding: 15px;
+            border-radius: 12px; text-align: left; cursor: pointer; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .shortcut-btn:active { transform: scale(0.98); background: rgba(0, 242, 255, 0.1); }
+        .shortcut-btn h4 { font-family: 'Rajdhani'; font-size: 1.1rem; color: white; }
+        .shortcut-btn p { font-size: 0.65rem; color: #888; }
+        .shortcut-icon { font-size: 1.5rem; color: var(--secondary); opacity: 0.8; }
+
+        /* --- SEARCH --- */
+        .search-wrap { position: relative; margin-bottom: 20px; }
+        .search-input {
+            width: 100%; background: #0a0a0a; border: 1px solid #333;
+            color: white; padding: 14px 14px 14px 45px; border-radius: 10px;
+            font-family: 'Poppins'; outline: none; transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0,242,255,0.15); }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #666; }
+
+        /* --- TABS --- */
+        .cat-scroll {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .cat-btn {
+            background: #111; border: 1px solid #333; color: #aaa;
+            padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; white-space: nowrap; cursor: pointer;
+        }
+        .cat-btn.active { background: var(--primary); color: black; font-weight: 700; border-color: var(--primary); }
+
+        /* --- PRODUCTS --- */
+        .prod-list { display: grid; gap: 15px; }
+        .prod-card {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px; padding: 15px; position: relative; overflow: hidden;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: 0.3s; animation: slideUp 0.5s ease;
+        }
+        .prod-card:hover { border-color: var(--secondary); transform: translateX(5px); }
+        .prod-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background: var(--secondary); }
+        
+        .prod-info h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; color: white; }
+        .prod-info p { font-size: 0.7rem; color: #888; max-width: 200px; }
+        .prod-price { text-align: right; }
+        .price-tag { display: block; font-family:'Rajdhani'; font-size:1.2rem; font-weight:700; color:var(--success); margin-bottom:5px; }
+        .btn-buy {
+            background: transparent; border: 1px solid var(--primary); color: var(--primary);
+            padding: 5px 15px; font-size: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer;
+        }
+        .btn-buy:active { background: var(--primary); color: black; }
+
+        /* --- NAV BOT --- */
+        .nav-bot {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; height: 65px;
+            background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .nav-item {
+            color: #666; font-size: 1.3rem; position: relative; cursor: pointer; transition: 0.3s;
+            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+        }
+        .nav-item.active { color: white; }
+        .nav-center {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--secondary), #7000ff);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: white; margin-top: -30px;
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.5);
+            border: 4px solid var(--bg-dark);
+            animation: pulse-glow 3s infinite;
+            cursor: pointer; position: relative; z-index: 1001;
+        }
+
+        /* --- MODALS --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 2000;
+            justify-content: center; align-items: flex-end;
+        }
+        .modal.center { align-items: center; }
+        .modal-sheet {
+            background: #111; width: 100%; max-width: 500px;
+            border-radius: 20px 20px 0 0; border-top: 2px solid var(--primary);
+            padding: 25px; max-height: 85vh; overflow-y: auto;
+            position: relative; animation: slideUp 0.3s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+        }
+        .modal-box {
+            background: #111; width: 90%; max-width: 400px; border-radius: 15px;
+            border: 1px solid #333; padding: 25px; position: relative;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .modal-title { font-family: 'Rajdhani'; font-size: 1.4rem; color: var(--primary); }
+        .close-btn { font-size: 1.5rem; color: #666; cursor: pointer; }
+
+        /* --- ADMIN STYLES --- */
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .adm-tab-btn { flex: 1; background: #222; color: #888; border: none; padding: 8px; border-radius: 6px; cursor: pointer; }
+        .adm-tab-btn.active { background: var(--secondary); color: white; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 5px; }
+        .form-input {
+            width: 100%; background: #050505; border: 1px solid #333; color: white;
+            padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.8rem;
+        }
+        
+        .pm-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #0a0a0a; border: 1px solid #222; padding: 10px;
+            margin-bottom: 8px; border-radius: 6px;
+        }
+        .pm-info { font-size: 0.8rem; color: white; }
+        .pm-info small { display: block; color: #666; font-size: 0.7rem; }
+        .pm-actions button {
+            border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; margin-left: 5px;
+        }
+        .btn-edit { background: var(--primary); color: black; }
+        .btn-del { background: var(--danger); color: white; }
+        .btn-add { width: 100%; background: var(--success); color: black; padding: 10px; border: none; border-radius: 6px; font-weight: bold; margin-bottom: 15px; cursor: pointer; }
+        .btn-full {
+            width: 100%; background: var(--secondary); color: white; padding: 12px;
+            border: none; border-radius: 6px; font-weight: 700; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;
+        }
+
+        /* --- EXTRAS --- */
+        .hist-item { background: #0a0a0a; border: 1px solid #222; border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .comm-input-area { display: flex; gap: 10px; margin-top: 15px; }
+        .comm-input { flex: 1; background: #222; border: none; padding: 10px; border-radius: 8px; color: white; font-size: 0.8rem; }
+        .comm-btn { background: var(--secondary); border: none; padding: 0 15px; border-radius: 8px; color: white; cursor: pointer; }
+        .chat-bubble { background: #1a1a1a; padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--secondary); }
+        .toast { position: fixed; top: 20px; right: 20px; background: #111; border-left: 4px solid var(--success); padding: 15px; color: white; border-radius: 4px; z-index: 10000; display: none; }
+
+    </style>
+</head>
+<body>
+
+    <div class="cyber-grid"></div>
+    <div id="toast" class="toast">Notifikasi System</div>
+
+    <div class="header-wrapper">
+        <div class="sound-btn" onclick="toggleAudio()">
+            <i class="fa-solid fa-volume-xmark" id="audioIcon"></i>
+        </div>
+
+        <video class="header-video" id="bgVideo" autoplay muted loop playsinline>
+            <source src="1001304277.mp4" type="video/mp4">
+        </video>
+        <div class="header-overlay"></div>
+        <div class="header-content">
+            <span class="status-badge">COPYRIGHT YUKIE</span>
+            <h1 class="glitch-title" id="storeName">YAGAMI CRASHER</h1>
+            <div class="sub-title">
+                <i class="fa-solid fa-shield-halved"></i> Tempat Belanja Panel Murah Dan Garansi 24 jam
+            </div>
+        </div>
+    </div>
+
+    <div class="marquee-box">
+        <div class="marquee-text" id="marqueeText">SELAMAT DATANG DI YAGAMI CRASHER STORE - V8 FIXED VERSION - SEMUA TOMBOL DIPERBAIKI - ANTI MACET</div>
+    </div>
+
+    <div class="container">
+        
+        <div class="profile-glass">
+            <img src="1001304275.jpg" class="profile-img" id="profileImage">
+            <div style="flex:1;">
+                <h3 id="adminName" style="color:white; font-family:'Rajdhani'; font-weight:700;">ROMU MARKET</h3>
+                <small style="color:#888;">Status: <span id="adminStatusTxt" style="color:var(--primary);">Online</span></small>
+            </div>
+            <button onclick="openPayment()" style="background:#222; border:1px solid #444; color:white; width:40px; height:40px; border-radius:10px; cursor:pointer; position:relative; z-index:10;">
+                <i class="fa-solid fa-wallet" style="color:var(--success);"></i>
+            </button>
+        </div>
+
+        <div class="shortcut-grid">
+            <div class="shortcut-btn" onclick="openModal('communityModal')">
+                <div><h4>Public Wall</h4><p>Diskusi & Saran</p></div>
+                <i class="fa-solid fa-comments shortcut-icon"></i>
+            </div>
+            <div class="shortcut-btn" onclick="contactAdmin()">
+                <div><h4>Live Chat</h4><p>Hubungi Admin</p></div>
+                <i class="fa-brands fa-whatsapp shortcut-icon" style="color:#25D366;"></i>
+            </div>
+        </div>
+
+        <div class="search-wrap">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari item..." onkeyup="filterProducts()">
+        </div>
+
+        <div class="cat-scroll">
+            <button class="cat-btn active" onclick="filterCategory('all', this)">ALL ITEMS</button>
+            <button class="cat-btn" onclick="filterCategory('panel', this)">PANEL</button>
+            <button class="cat-btn" onclick="filterCategory('script', this)">SCRIPT</button>
+            <button class="cat-btn" onclick="filterCategory('jasa', this)">JASA</button>
+        </div>
+
+        <div class="prod-list" id="productList"></div>
+
+    </div>
+
+    <div class="nav-bot">
+        <div class="nav-item active" onclick="window.scrollTo(0,0)"><i class="fa-solid fa-house"></i></div>
+        <div class="nav-center" onclick="openHistory()"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div class="nav-item" onclick="openAdminPanel()"><i class="fa-solid fa-sliders"></i></div>
+    </div>
+
+    <div id="historyModal" class="modal">
+        <div class="modal-sheet">
+            <div class="modal-header">
+                <h3 class="modal-title">RIWAYAT</h3>
+                <span class="close-btn" onclick="closeModal('historyModal')">&times;</span>
+            </div>
+            <div id="historyList" style="padding-bottom:20px;"></div>
+        </div>
+    </div>
+
+    <div id="communityModal" class="modal">
+        <div class="modal-sheet">
+            <div class="modal-header">
+                <h3 class="modal-title">PUBLIC WALL</h3>
+                <span class="close-btn" onclick="closeModal('communityModal')">&times;</span>
+            </div>
+            <div id="chatContainer" style="height:300px; overflow-y:auto; margin-bottom:10px; border:1px solid #222; border-radius:10px; padding:10px;"></div>
+            <div class="comm-input-area">
+                <input type="text" id="commName" placeholder="Nama" style="width:30%; background:#222; border:none; padding:10px; border-radius:8px; color:white;">
+                <input type="text" id="commMsg" placeholder="Pesan..." class="comm-input">
+                <button class="comm-btn" onclick="sendChat()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal center">
+        <div class="modal-box" style="text-align:center;">
+            <span class="close-btn" style="position:absolute; right:15px; top:10px;" onclick="closeModal('paymentModal')">&times;</span>
+            <h3 style="color:var(--primary); font-family:'Rajdhani'; margin-bottom:15px;">PAYMENT</h3>
+            <img src="1001304274.jpg" id="qrisImage" style="width:100%; border-radius:10px; border:2px solid white; margin-bottom:10px;">
+            <div style="background:#222; padding:10px; border-radius:8px;">
+                <small style="color:#aaa;">DANA / GOPAY</small>
+                <h2 id="paymentNumber" style="color:white; cursor:pointer;" onclick="copyNum(this.innerText)">081396474675</h2>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminModal" class="modal">
+        <div class="modal-sheet">
+            <div class="modal-header">
+                <h3 class="modal-title" style="color:var(--secondary)">ADMIN CONTROL</h3>
+                <span class="close-btn" onclick="closeModal('adminModal')">&times;</span>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="adm-tab-btn active" onclick="switchTab('gen', this)">UMUM</button>
+                <button class="adm-tab-btn" onclick="switchTab('med', this)">MEDIA</button>
+                <button class="adm-tab-btn" onclick="switchTab('prod', this)">PRODUK</button>
+            </div>
+
+            <div id="tab-gen" class="tab-content">
+                <div class="form-group"><label>Nama Toko</label><input type="text" id="inpStore" class="form-input"></div>
+                <div class="form-group"><label>Nama Admin</label><input type="text" id="inpAdmin" class="form-input"></div>
+                <div class="form-group"><label>Status</label><input type="text" id="inpStatus" class="form-input"></div>
+                <div class="form-group"><label>WA Owner</label><input type="number" id="inpPhone" class="form-input"></div>
+                <div class="form-group"><label>Running Text</label><input type="text" id="inpMarquee" class="form-input"></div>
+                <button onclick="saveGeneral()" class="btn-full">SIMPAN</button>
+            </div>
+
+            <div id="tab-med" class="tab-content" style="display:none;">
+                <div class="form-group"><label>Video Header</label><input type="text" id="inpVid" class="form-input"></div>
+                <div class="form-group"><label>Foto Profil</label><input type="text" id="inpProf" class="form-input"></div>
+                <div class="form-group"><label>Foto QRIS</label><input type="text" id="inpQris" class="form-input"></div>
+                <button onclick="saveMedia()" class="btn-full">SIMPAN</button>
+            </div>
+
+            <div id="tab-prod" class="tab-content" style="display:none;">
+                <button class="btn-add" onclick="openEditForm('new')">+ TAMBAH PRODUK</button>
+                <div id="adminProdList"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="editProdModal" class="modal center" style="z-index: 2100;">
+        <div class="modal-box">
+            <h3 style="color:white; margin-bottom:15px;">EDITOR</h3>
+            <input type="hidden" id="editId">
+            <div class="form-group"><label>Nama</label><input type="text" id="editName" class="form-input"></div>
+            <div class="form-group"><label>Harga</label><input type="text" id="editPrice" class="form-input"></div>
+            <div class="form-group"><label>Kategori</label><input type="text" id="editCat" class="form-input"></div>
+            <div class="form-group"><label>Deskripsi</label><input type="text" id="editDesc" class="form-input"></div>
+            <div style="display:flex; gap:10px;">
+                <button onclick="saveProductData()" class="btn-full" style="background:var(--success); color:black;">SIMPAN</button>
+                <button onclick="closeModal('editProdModal')" class="btn-full" style="background:#333;">BATAL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const defaultConfig = {
+            storeName: "YAGAMI CRASHER", adminName: "ROMU MARKET", status: "Online",
+            phone: "6281396474675", marquee: "SELAMAT DATANG DI YAGAMI CRASHER - V8 FIXED",
+            pin: "12345", vid: "1001304277.mp4", prof: "1001304275.jpg", qris: "1001304274.jpg"
+        };
+        const defaultProducts = [
+            { id: 1, name: "Panel Run Bot Unli", price: "Rp 15.000", cat: "panel", desc: "Ram Unlimited, Anti Delay" },
+            { id: 2, name: "Admin Panel 4GB", price: "Rp 10.000", cat: "panel", desc: "Full Akses, Create User" },
+            { id: 3, name: "SC Bot Push Kontak", price: "Rp 35.000", cat: "script", desc: "No Enc, Anti Banned" }
+        ];
+
+        let config = {}, products = [], historyData = [], chatData = [];
+
+        window.onload = function() {
+            try {
+                // Load Safe
+                if(localStorage.getItem('ygm_v6_cfg')) config = JSON.parse(localStorage.getItem('ygm_v6_cfg'));
+                else config = defaultConfig;
+
+                if(localStorage.getItem('ygm_v6_prod')) products = JSON.parse(localStorage.getItem('ygm_v6_prod'));
+                else products = defaultProducts;
+
+                historyData = JSON.parse(localStorage.getItem('ygm_v6_hist')) || [];
+                chatData = JSON.parse(localStorage.getItem('ygm_v6_chat')) || [];
+
+                renderUI();
+                renderProducts(products);
+                renderChat();
+            } catch(e) {
+                console.error("Resetting data due to error", e);
+                localStorage.clear();
+                location.reload();
+            }
+        };
+
+        function renderUI() {
+            document.getElementById('storeName').innerText = config.storeName;
+            document.getElementById('adminName').innerText = config.adminName;
+            document.getElementById('adminStatusTxt').innerText = config.status;
+            document.getElementById('marqueeText').innerText = config.marquee;
+            document.getElementById('paymentNumber').innerText = config.phone.replace(/^62/, '0');
+            document.getElementById('bgVideo').src = config.vid;
+            document.getElementById('profileImage').src = config.prof;
+            document.getElementById('qrisImage').src = config.qris;
+            
+            // Admin Fill
+            document.getElementById('inpStore').value = config.storeName;
+            document.getElementById('inpAdmin').value = config.adminName;
+            document.getElementById('inpStatus').value = config.status;
+            document.getElementById('inpPhone').value = config.phone;
+            document.getElementById('inpMarquee').value = config.marquee;
+            document.getElementById('inpVid').value = config.vid;
+            document.getElementById('inpProf').value = config.prof;
+            document.getElementById('inpQris').value = config.qris;
+        }
+
+        function renderProducts(data) {
+            const list = document.getElementById('productList');
+            list.innerHTML = '';
+            data.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'prod-card';
+                el.innerHTML = `
+                    <div class="prod-info"><h3>${item.name}</h3><p>${item.desc}</p></div>
+                    <div class="prod-price">
+                        <span class="price-tag">${item.price}</span>
+                        <button class="btn-buy" onclick="buyItem('${item.name}', '${item.price}')">BELI</button>
+                    </div>`;
+                list.appendChild(el);
+            });
+        }
+
+        function toggleAudio() {
+            const vid = document.getElementById('bgVideo');
+            const icon = document.getElementById('audioIcon');
+            if(vid.muted) { vid.muted = false; icon.className = 'fa-solid fa-volume-high'; showToast("SUARA AKTIF"); }
+            else { vid.muted = true; icon.className = 'fa-solid fa-volume-xmark'; showToast("SUARA MATI"); }
+        }
+
+        function openAdminPanel() {
+            const p = prompt("PIN GOD MODE:");
+            if(p === config.pin) { openModal('adminModal'); renderProductManager(); }
+            else if(p !== null) alert("PIN SALAH");
+        }
+
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById('tab-' + tab).style.display = 'block';
+            document.querySelectorAll('.adm-tab-btn').forEach(el => el.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function saveGeneral() {
+            config.storeName = document.getElementById('inpStore').value;
+            config.adminName = document.getElementById('inpAdmin').value;
+            config.status = document.getElementById('inpStatus').value;
+            config.phone = document.getElementById('inpPhone').value;
+            config.marquee = document.getElementById('inpMarquee').value;
+            saveConfigToLocal();
+        }
+        function saveMedia() {
+            config.vid = document.getElementById('inpVid').value;
+            config.prof = document.getElementById('inpProf').value;
+            config.qris = document.getElementById('inpQris').value;
+            saveConfigToLocal();
+        }
+        function saveConfigToLocal() {
+            localStorage.setItem('ygm_v6_cfg', JSON.stringify(config));
+            alert("Disimpan!"); renderUI();
+        }
+
+        function renderProductManager() {
+            const list = document.getElementById('adminProdList'); list.innerHTML = '';
+            products.forEach((p, index) => {
+                list.innerHTML += `
+                    <div class="pm-item">
+                        <div class="pm-info"><b>${p.name}</b><small>${p.price}</small></div>
+                        <div class="pm-actions">
+                            <button class="btn-edit" onclick="openEditForm(${index})"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-del" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function openEditForm(index) {
+            openModal('editProdModal');
+            if(index === 'new') {
+                document.getElementById('editId').value = 'new';
+                document.getElementById('editName').value = ''; document.getElementById('editPrice').value = '';
+                document.getElementById('editCat').value = 'panel'; document.getElementById('editDesc').value = '';
+            } else {
+                const p = products[index];
+                document.getElementById('editId').value = index;
+                document.getElementById('editName').value = p.name; document.getElementById('editPrice').value = p.price;
+                document.getElementById('editCat').value = p.cat; document.getElementById('editDesc').value = p.desc;
+            }
+        }
+
+        function saveProductData() {
+            const idx = document.getElementById('editId').value;
+            const newProd = {
+                id: Date.now(), name: document.getElementById('editName').value, price: document.getElementById('editPrice').value,
+                cat: document.getElementById('editCat').value, desc: document.getElementById('editDesc').value
+            };
+            if(idx === 'new') products.push(newProd); else products[idx] = newProd;
+            localStorage.setItem('ygm_v6_prod', JSON.stringify(products));
+            closeModal('editProdModal'); renderProductManager(); renderProducts(products);
+        }
+
+        function deleteProduct(index) {
+            if(confirm("Hapus?")) {
+                products.splice(index, 1); localStorage.setItem('ygm_v6_prod', JSON.stringify(products));
+                renderProductManager(); renderProducts(products);
+            }
+        }
+
+        function buyItem(name, price) {
+            const trxId = "TRX-" + Math.floor(Math.random() * 100000);
+            const date = new Date().toLocaleString();
+            historyData.unshift({ id: trxId, name: name, price: price, date: date, status: 'Pending' });
+            localStorage.setItem('ygm_v6_hist', JSON.stringify(historyData));
+            window.open(`https://wa.me/${config.phone}?text=Halo Admin ${config.adminName}, Beli ${name} Harga ${price}`, '_blank');
+        }
+
+        function openHistory() {
+            openModal('historyModal');
+            const list = document.getElementById('historyList'); list.innerHTML = '';
+            if(historyData.length === 0) list.innerHTML = '<div style="text-align:center; padding:20px; color:#555;">Kosong</div>';
+            historyData.forEach(item => {
+                list.innerHTML += `<div class="hist-item"><div><h4>${item.name}</h4><small>${item.date}</small></div><div style="text-align:right;"><b style="color:white;">${item.price}</b></div></div>`;
+            });
+        }
+
+        function renderChat() {
+            const c = document.getElementById('chatContainer'); c.innerHTML = '';
+            chatData.forEach(d => { c.innerHTML += `<div class="chat-bubble"><div style="color:var(--primary); font-size:0.8rem;">${d.name}</div><div style="color:#ddd; font-size:0.9rem;">${d.msg}</div></div>`; });
+            c.scrollTop = c.scrollHeight;
+        }
+        function sendChat() {
+            const n = document.getElementById('commName').value; const m = document.getElementById('commMsg').value;
+            if(!n || !m) return;
+            chatData.push({name:n, msg:m}); localStorage.setItem('ygm_v6_chat', JSON.stringify(chatData));
+            document.getElementById('commMsg').value = ''; renderChat();
+        }
+
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            if(cat === 'all') renderProducts(products); else renderProducts(products.filter(p => p.cat === cat));
+        }
+        function filterProducts() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            renderProducts(products.filter(p => p.name.toLowerCase().includes(q)));
+        }
+        function contactAdmin() { window.open(`https://wa.me/${config.phone}`, '_blank'); }
+        function openPayment() { openModal('paymentModal'); }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function copyNum(t) { navigator.clipboard.writeText(t); showToast("Disalin!"); }
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.style.display = 'block'; setTimeout(()=>t.style.display='none', 3000); }
+        window.onclick = function(e) { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; }
+    </script>
+</body>
+</html>
