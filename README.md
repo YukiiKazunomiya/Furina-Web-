@@ -1,11 +1,11 @@
-# ⚡ YAGAMI CRASHER STORE - V9 (Titanium Edition)
+# ⚡ YAGAMI CRASHER STORE
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Status](https://img.shields.io/badge/Status-Stable-success?style=for-the-badge)
 
-**Yagami Crasher V9** adalah template toko online (E-Commerce) berbasis Single File HTML yang dirancang khusus untuk penjualan produk digital (Script Bot, Panel Pterodactyl, Top Up, Jasa, dll).
+**Yagami Crasher ** adalah template toko online (E-Commerce) berbasis Single File HTML yang dirancang khusus untuk penjualan produk digital (Script Bot, Panel Pterodactyl, Top Up, Jasa, dll).
 
 Dibuat dengan desain **Cyberpunk/Anime UI** yang futuristik, dilengkapi dengan **Admin Panel Client-Side** yang memungkinkan pemilik toko mengubah semua konten tanpa perlu menyentuh kode sedikitpun.
 
@@ -23,7 +23,6 @@ Dibuat dengan desain **Cyberpunk/Anime UI** yang futuristik, dilengkapi dengan *
 - **Edit Tanpa Coding:** Ubah Nama Toko, Nomor WA, Running Text, Video, dan Foto Profil langsung dari menu Admin.
 - **Product Manager:** Tambah, Edit, dan Hapus produk menggunakan formulir visual (GUI).
 - **Media Manager:** Ganti file video atau gambar hanya dengan mengetik nama file.
-- **Keamanan:** Dilindungi dengan PIN Akses (Default: `12345`).
 
 ### 🛒 Sistem Transaksi & Komunitas
 - **WhatsApp Checkout:** Pesanan otomatis terkirim ke WhatsApp Admin dengan format rapi.
